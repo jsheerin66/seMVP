@@ -1,0 +1,11 @@
+#what we want in our app:
+# name
+
+# createdAt *note- there is no date-type in apollo
+
+# [todoId] -array
+
+type Resolutions {
+  _id: String!
+  name: String!
+}
