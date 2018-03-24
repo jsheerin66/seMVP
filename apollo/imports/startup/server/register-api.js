@@ -1,7 +1,7 @@
 import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 
-import ResolutionsSchema from "../../api/resolutions/Resolutions.graphql";
+import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
 
 /*
 1) make the first Query inside our schema using back-ticks
@@ -42,8 +42,6 @@ const resolvers = {
     }
   }
 }
-
-
 
 /*
 1)now we need to pass both of those into our apollo server
