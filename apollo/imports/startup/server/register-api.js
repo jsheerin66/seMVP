@@ -4,10 +4,10 @@ import { makeExecutableSchema } from 'graphql-tools';
 import ResolutionsSchema from "../../api/resolutions/Resolutions.graphql";
 
 /*
-1)make the first Query inside our schema using back-ticks
-2)note* this is not javascript, its graphgl query language
+1) make the first Query inside our schema using back-ticks
+2) note* this is not javascript, its graphgl query language
 3) hi is typically a function(the function name here) and functions need to be defined in our schema
-4)types can be different like instead of Query it could be its own thing like resolutions
+4) types can be different like instead of Query it could be its own thing like resolutions
 */
 const testSchema = `
 type Query {
@@ -16,14 +16,14 @@ type Query {
 `;
 const typeDefs = [
   testSchema,
-  ResolutionsSchema 
+  ResolutionsSchema
 ];
 
 /*
-1)after defining our query we need to define that function (hi) so define it in a resolver
-2)unlike the Query this will be javascript
+1) after defining our query we need to define that function (hi) so define it in a resolver
+2) unlike the Query this will be javascript
 this is the actual method or server side code
-3)We are only hitting the server for this Query, but it can replaced with a database-query 
+3) We are only hitting the server for this Query, but it can replaced with a database-query
 
 const resolvers = {
   Query: {
