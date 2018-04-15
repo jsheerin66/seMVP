@@ -2,7 +2,9 @@ import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
+import ResolutionResolvers from '../../api/resolutions/resolvers';
 
+import merge from 'lodash/merge';
 /*
 1) make the first Query inside our schema using back-ticks
 2) note* this is not javascript, its graphgl query language
@@ -12,6 +14,7 @@ import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
 const testSchema = `
 type Query {
   hi: String
+  resolutions: [Resolution]
 }
 `;
 const typeDefs = [
@@ -19,30 +22,21 @@ const typeDefs = [
   ResolutionsSchema
 ];
 
-/*
-1) after defining our query we need to define that function (hi) so define it in a resolver
-2) unlike the Query this will be javascript
-this is the actual method or server side code
-3) We are only hitting the server for this Query, but it can replaced with a database-query
-
-const resolvers = {
-  Query: {
-    hi() {
-      return "Hey Yo, moving on UP!";
-    }
-  }
-}
-*/
-
 //we replace the query to our server with a query to our database
-const resolvers = {
+const testResolvers = {
   Query: {
     hi() {
-      return "Hey Yo, moving on UP!";
+      return "Hello Level UP!";
     }
   }
 }
 
+// the merge() from lodash merges the two resolvers together instead of having
+// add the resolver from resolvers.js which would also have a nested Query{}
+// Thanks Scott, your naming conventions for your tutorials is disgusting
+// *NOTE* merge is not common practice but is the best way
+const resolvers = merge(testResolvers, ResolutionResolvers);
+console.log("This is resolvers: ", resolvers);
 /*
 1)now we need to pass both of those into our apollo server
 2) we do that based on  makeExecutableSchema
@@ -55,3 +49,24 @@ const schema = makeExecutableSchema({
 
 //we pass our schema(resolver/typeDefs to our apollo server)
 createApolloServer({ schema });
+
+export default {
+//we replace the query to our server with a query to our database
+  Query: {
+    hi() {
+      return "Hey Yo, moving on UP!";
+    },
+	resolutions () {
+      return [
+		{
+          _id: 'asdasd',
+		  name: 'get some name Oliver'
+		},
+		{
+          _id: 'asdasd',
+		  name: 'get some name biggie'
+		}
+	  ];
+	}
+  }
+}

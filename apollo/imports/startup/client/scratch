@@ -1,0 +1,55 @@
+ // from resolvers.js
+
+import Resolutions from './resolutions';
+
+/* Just to shoe that we can put this anywhere in here and access it
+   Resolutions.insert({
+       name: 'Test Res'
+   });
+*/
+
+const res = Resolutions.find({}).fetch();
+console.log('This is the res in resolvers.js:', res);
+
+// Note that I had to add a this comment here to get rid of the error -
+// `Error: "Mutation" defined in resolvers, but not in schema`
+// Maybe meteor doesn't recognize change in .graphql file extensions?
+export default {
+//we replace the query to our server with a query to our database
+  Query: {
+    resolutions () {
+      return Resolutions.find({}).fetch();
+    }
+  },
+  Mutation: {
+    createResolution () {
+      /* const resolutionId = Resolutions.insert({
+       *   name: 'Test Res'
+       * }); */
+    }
+  }
+};
+
+/* This is from right before lesson 11 before hooking mongo up
+export default {
+//we replace the query to our server with a query to our database
+  Query: {
+    hi() {
+      return "Hey Yo, moving on UP!";
+    },
+	resolutions () {
+      return [
+		{
+          _id: 'asdasd',
+		  name: 'get some name Oliver'
+		},
+		{
+          _id: 'asdasd',
+		  name: 'get some name biggie'
+		}
+	  ];
+	}
+  }
+}
+
+*/

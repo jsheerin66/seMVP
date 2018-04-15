@@ -1,11 +1,14 @@
-#what we want in our app:
+# This is the schema, again Scott- your naming conventions suck balls
+
 # name
+# createdAt
+# [todoId]
 
-# createdAt *note- there is no date-type in apollo
-
-# [todoId] -array
-
-type Resolutions {
+type Resolution {
   _id: String!
   name: String!
+}
+
+type Mutation {
+  createResolution: Resolution
 }
