@@ -1,23 +1,23 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import ResolutionForm from './ResolutionsForm';
 
 const App = ({ data }) =>{
-  if (data.loading) return null; {
-
-  }
+  if (data.loading) return null;
   return (
     <div>
-    <div className="box">
-      <h1 className="row">{data.hi}</h1>
-	  <ul>
-	    {data.resolutions.map(resolution => (
-		  <li key={resolution.id}>{resolution.name}</li>
-	    ))}
-      </ul>
+      <div className="box">
+        <h1 className="row">{data.hi}</h1>
+        <ResolutionForm />
+        <ul>
+          {data.resolutions.map(resolution => (
+            <li key={resolution.id}>{resolution.name}</li>
+          ))}
+        </ul>
+      </div>
     </div>
-  </div>
-  )
+  );
 }
 
 const hiQuery = gql`
