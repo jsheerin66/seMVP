@@ -1,12 +1,13 @@
-import React from "react";
-import { Meteor } from "meteor/meteor";
-import { render } from "react-dom";
-import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink, from } from 'apollo-link';
 
-import App from "../../ui/App";
+import App from '../../ui/App';
 
 /*
 1)create a new meteor client connection
@@ -16,13 +17,21 @@ like when conncting to a database like mongo or MySQL
 const httpLink = new HttpLink({
   uri: Meteor.absoluteUrl('graphql')
 });
-
+const authLink = new ApolloLink((operation, forward) => {
+  const token = Accounts._storedLoginToken();
+  operation.setContext(() => ({
+    headers: {
+      'Meteor-login-token': token
+    }
+  }));
+  return forward(operation)
+});
 // create a cache
 const cache = new InMemoryCache();
 
 // create new apollo client
 const client = new ApolloClient({
-  link: httpLink,
+  link: from([authLink, httpLink]),
   cache
 });
 
@@ -36,5 +45,5 @@ const ApolloApp = () => (
 Meteor.startup(() => {
   render(
     <ApolloApp />,
-    document.getElementById("app"))
+    document.getElementById('app'))
 });

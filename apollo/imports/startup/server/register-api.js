@@ -1,10 +1,11 @@
 import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 
-import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
-import ResolutionResolvers from '../../api/resolutions/resolvers';
-
 import merge from 'lodash/merge';
+
+import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
+import ResolutionsResolvers from '../../api/resolutions/resolvers';
+
 /*
 1) make the first Query inside our schema using back-ticks
 2) note* this is not javascript, its graphgl query language
@@ -17,6 +18,7 @@ type Query {
   resolutions: [Resolution]
 }
 `;
+
 const typeDefs = [
   testSchema,
   ResolutionsSchema
@@ -25,8 +27,8 @@ const typeDefs = [
 //we replace the query to our server with a query to our database
 const testResolvers = {
   Query: {
-    hi() {
-      return "Hello Level UP!";
+    hi () {
+      return 'Hello Level UP!';
     }
   }
 }
@@ -35,8 +37,9 @@ const testResolvers = {
 // add the resolver from resolvers.js which would also have a nested Query{}
 // Thanks Scott, your naming conventions for your tutorials is disgusting
 // *NOTE* merge is not common practice but is the best way
-const resolvers = merge(testResolvers, ResolutionResolvers);
-console.log("This is resolvers: ", resolvers);
+// Scott likes to have folders serperating reolvers, mutations, and schemas
+const resolvers = merge(testResolvers, ResolutionsResolvers);
+console.log('This is resolvers: ', resolvers);
 /*
 1)now we need to pass both of those into our apollo server
 2) we do that based on  makeExecutableSchema
@@ -50,23 +53,25 @@ const schema = makeExecutableSchema({
 //we pass our schema(resolver/typeDefs to our apollo server)
 createApolloServer({ schema });
 
+/*
 export default {
 //we replace the query to our server with a query to our database
   Query: {
     hi() {
       return "Hey Yo, moving on UP!";
     },
-	resolutions () {
+    resolutions () {
       return [
-		{
+        {
           _id: 'asdasd',
-		  name: 'get some name Oliver'
-		},
-		{
+          name: 'get some name Oliver'
+        },
+        {
           _id: 'asdasd',
-		  name: 'get some name biggie'
-		}
-	  ];
-	}
+          name: 'get some name biggie'
+        }
+      ];
+    }
   }
 }
+*/

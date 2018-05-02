@@ -1,41 +1,38 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import ResolutionForm from './ResolutionsForm';
+import ResolutionForm from './ResolutionForm';
+import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 
-const App = ({ data }) =>{
-  if (data.loading) return null;
+// *Note, Meteor.logout() sometimes hangs and won't logout when called. Firggin browsers
+const App = ({ loading, resolutions }) => {
+  if (loading) return null;
   return (
     <div>
-      <div className="box">
-        <h1 className="row">{data.hi}</h1>
-        <ResolutionForm />
-        <ul>
-          {data.resolutions.map(resolution => (
-            <li key={resolution.id}>{resolution.name}</li>
-          ))}
-        </ul>
-      </div>
+      <button onClick={() => Meteor.logout()}>Logout</button>
+      <RegisterForm />
+      <LoginForm />
+      <ResolutionForm />
+      <ul>
+        {resolutions.map(resolution => (
+          <li key={resolution._id}>{resolution.name}</li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
-const hiQuery = gql`
-{
-  hi
+const resolutionsQuery = gql`
+ query Resolutions {
   resolutions {
     _id
     name
- }
-}
+   }
+  }
 `;
-const username = gql`
-{
-  username:password
-}
-`
 
 // In react-devtools we see that we have a prop from our hiQuery
-export default graphql(
-  hiQuery
-)(App);
+export default graphql(resolutionsQuery, {
+  props: ({ data }) => ({ ...data })
+})(App);

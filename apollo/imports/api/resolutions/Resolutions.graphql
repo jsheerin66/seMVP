@@ -4,11 +4,16 @@
 # createdAt
 # [todoId]
 
+# so this is does not define the shape of the data in the database
+# So its not 1 to 1, its simply the schema of your public api(the stuff that is available publicly)
+
 type Resolution {
   _id: String!
   name: String!
 }
 
+# this is a 'new' type so now we have 2 types defined in our schema
 type Mutation {
-  createResolution: Resolution
+  createResolution(name: String!): Resolution
 }
+# fuck scott

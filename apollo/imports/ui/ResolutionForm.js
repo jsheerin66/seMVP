@@ -3,9 +3,10 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
 // so lets define a mutation with graphql
+// this is using the graphql query language
 const createResolution = gql`
-  mutation createResolution {
-    createResolution {
+  mutation createResolution($name: String!) {
+    createResolution(name: $name) {
       _id
     }
   }
@@ -14,8 +15,16 @@ const createResolution = gql`
  class ResolutionForm extends Component {
   submitForm = () => {
 	console.log("In the submitForm[this.name.value]: ", this.name.value);
-	this.props.createResolution();
-}
+	// this would be called mutate but we changed the name to createResolution when we exported it below
+	this.props.createResolution({
+      variables: {
+        name: this.name.value
+	  }
+	}).catch(error => {
+	  console.log('Scotts voice is getting to me but also you have an error');
+	});
+  };
+
   render () {
     return (
       <div>
@@ -31,5 +40,8 @@ const createResolution = gql`
 // We will use that to change the name of our mutation to the name created for
 // our mutation which is createResolution
 export default graphql (createResolution, {
-  name: 'createResolution'
+  name: 'createResolution',
+  options: {
+    refetchQueries: ['Resolutions']
+  }
 })(ResolutionForm);
