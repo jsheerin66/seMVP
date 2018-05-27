@@ -12,8 +12,12 @@ type Resolution {
   name: String!
 }
 
+type Query {
+  resolutions: [Resolution]
+}
+
+
 # this is a 'new' type so now we have 2 types defined in our schema
 type Mutation {
   createResolution(name: String!): Resolution
 }
-# fuck scott

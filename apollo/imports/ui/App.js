@@ -7,29 +7,34 @@ import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 /* Accounts is now a global variable from accounts-package it doesn't need to
    be imported here but we will just to keep it consistent*/
-// import{ Accounts } from 'meteor/accounts-base';
-
 /* *Note, Meteor.logout() sometimes hangs and won't logout when called. Firggin browsers */
 const App = ({ loading, resolutions, client, user }) => {
   if (loading) return null;
   return (
-	       <div>
-      <button
+	<div>
+	  { user._id ? (
+		<button
         onClick={() => {
           Meteor.logout();
           client.resetStore();
-        }}>
+        }}
+		>
         Logout
-      </button>
-      <RegisterForm client={client} />
-      <LoginForm client={client} />
+		</button>
+
+	  ) : (
+		<div>
+		  <RegisterForm client={client} />
+		  <LoginForm client={client} />
+		</div>
+	  )}
       <ResolutionForm />
       <ul>
         {resolutions.map(resolution => (
           <li key={resolution._id}>{resolution.name}</li>
         ))}
-      </ul>
-    </div>
+    </ul>
+      </div>
   );
 };
 
@@ -72,3 +77,29 @@ export default graphql(resolutionsQuery, {
       </ul>
     </div>
 */
+
+
+
+/* The one that is at the end of 18
+
+    <div>
+      { user._id ? (<button
+        onClick={() => {
+          Meteor.logout();
+          client.resetStore();
+        }}>
+        Logout
+      </button>
+      ) : (
+        <div>
+          <RegisterForm client={client} />
+          <LoginForm client={client} />
+        </div>
+        )}
+      <ResolutionForm />
+      <ul>
+        {resolutions.map(resolution => (
+          <li key={resolution._id}>{resolution.name}</li>
+        ))}
+      </ul>
+    </div>*/

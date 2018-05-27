@@ -15,13 +15,14 @@ const createResolution = gql`
  class ResolutionForm extends Component {
   submitForm = () => {
 	console.log("In the submitForm[this.name.value]: ", this.name.value);
-	// this would be called mutate but we changed the name to createResolution when we exported it below
-	this.props.createResolution({
+	/* this would be called mutate but we changed the name to createResolution when we exported it below */
+	this.props
+	  .createResolution({
       variables: {
         name: this.name.value
 	  }
 	}).catch(error => {
-	  console.log('Scotts voice is getting to me but also you have an error');
+	  console.log('you have an error in ResolutionForm: ', error);
 	});
   };
 
@@ -35,10 +36,10 @@ const createResolution = gql`
   }
 }
 
-// in reactDevTools the props show up as 'mutate', but we named it createResolution
+/* in reactDevTools the props show up as 'mutate', but we named it createResolution
 // so, to change the name -the graphql() takes a second arg (which is an object)
 // We will use that to change the name of our mutation to the name created for
-// our mutation which is createResolution
+// our mutation which is createResolution */
 export default graphql (createResolution, {
   name: 'createResolution',
   options: {
