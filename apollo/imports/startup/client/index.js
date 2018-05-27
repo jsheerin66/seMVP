@@ -17,6 +17,7 @@ like when conncting to a database like mongo or MySQL
 const httpLink = new HttpLink({
   uri: Meteor.absoluteUrl('graphql')
 });
+// AppoLink -check the documentation
 const authLink = new ApolloLink((operation, forward) => {
   const token = Accounts._storedLoginToken();
   operation.setContext(() => ({

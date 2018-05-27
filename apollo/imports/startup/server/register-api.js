@@ -2,9 +2,10 @@ import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 
 import merge from 'lodash/merge';
-
 import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
 import ResolutionsResolvers from '../../api/resolutions/resolvers';
+import UsersSchema from '../../api/users/User.graphql';
+import UsersResolvers from '../../api/users/resolvers';
 
 /*
 1) make the first Query inside our schema using back-ticks
@@ -16,15 +17,17 @@ const testSchema = `
 type Query {
   hi: String
   resolutions: [Resolution]
+  user: User
 }
 `;
 
 const typeDefs = [
   testSchema,
-  ResolutionsSchema
+  ResolutionsSchema,
+  UsersSchema
 ];
 
-//we replace the query to our server with a query to our database
+/* we replace the query to our server with a query to our database */
 const testResolvers = {
   Query: {
     hi () {
@@ -33,12 +36,16 @@ const testResolvers = {
   }
 }
 
-// the merge() from lodash merges the two resolvers together instead of having
+/* the merge() from lodash merges the two resolvers together instead of having
 // add the resolver from resolvers.js which would also have a nested Query{}
 // Thanks Scott, your naming conventions for your tutorials is disgusting
 // *NOTE* merge is not common practice but is the best way
-// Scott likes to have folders serperating reolvers, mutations, and schemas
-const resolvers = merge(testResolvers, ResolutionsResolvers);
+// Scott likes to have folders serperating reolvers, mutations, and schemas */
+const resolvers = merge(
+  testResolvers,
+  ResolutionsResolvers,
+  UsersResolvers
+);
 console.log('This is resolvers: ', resolvers);
 /*
 1)now we need to pass both of those into our apollo server
@@ -50,7 +57,7 @@ const schema = makeExecutableSchema({
   resolvers
 })
 
-//we pass our schema(resolver/typeDefs to our apollo server)
+// we pass our schema(resolver/typeDefs to our apollo server)
 createApolloServer({ schema });
 
 /*
