@@ -1,5 +1,5 @@
 import Resolutions from './resolutions';
-
+import Goals from '../goals/goals';
 /* Just to show that we can put this anywhere in here and access it
    Resolutions.insert({
        name: 'Test Res'
@@ -23,6 +23,21 @@ export default {
       }).fetch();
     }
   },
+    Resolution: {	  /* console.log('resolutionId: ', resolution._id); /* Now we have access to our goals through the resolutions schema itself even though resolutions is not even calling goals */
+    goals: resolution =>
+      Goals.find({
+        resolutionId: resolution._id
+      }).fetch(),
+
+    completed: resolution => {
+      const goals = Goals.find({
+        resolutionId: resolution._id
+      }).fetch();
+      if (goals.length === 0) return false;
+      const completedGoals = goals.filter(goal => goal.completed);
+      return goals.length === completedGoals.length;
+    }
+},
   /* From lesson #17
 
      Note that Scott keeps his mutations in a seperate file and uses merge to get them all together
@@ -33,10 +48,11 @@ export default {
       */
   Mutation: {
     createResolution (obj, { name }, { userId }) {
-	  /* resolutionId is sending the text field content on the client
+	  if (userId) {
+		/* resolutionId is sending the text field content on the client
 		 side through a Mutation, and hitting the server   */
-	  // console.log('userId: ',userId);
-	  /* console.log('This is Resolutions from DB: ', Resolutions);
+		// console.log('userId: ',userId);
+		/* console.log('This is Resolutions from DB: ', Resolutions);
       console.log('This is name:', name);
       console.log('THis is obj: ', obj);
       console.log('This is context: ', userId);
@@ -45,10 +61,12 @@ export default {
         name,
         userId
       });
-	  /* its only because graphql is expecting a return that
+		/* its only because graphql is expecting a return that
 		 we have the following line. We are not yet doing
 		 anything with this return  */
-      return Resolutions.findOne(resolutionId);
+		return Resolutions.findOne(resolutionId);
+	  }
+	  throw new Error("Unauthorized");
     }
   }
 };

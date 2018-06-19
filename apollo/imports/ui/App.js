@@ -3,31 +3,36 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { withApollo } from 'react-apollo';
 import ResolutionForm from './ResolutionForm';
-import RegisterForm from './RegisterForm';
-import LoginForm from './LoginForm';
+import GoalForm from './GoalForm';
+import Goal from './resolutions/Goal';
+import UserForm from './UserForm';
 /* Accounts is now a global variable from accounts-package it doesn't need to
    be imported here but we will just to keep it consistent*/
 /* *Note, Meteor.logout() sometimes hangs and won't logout when called. Firggin browsers */
 /* So what we did here was pass loading and resolutions here and because of
- the export default graphql({}); down below we set it up so that we can reference
- the resolutionsQuery by the data that we need which is resolutions */
+   the export default graphql({}); down below we set it up so that we can reference
+   the resolutionsQuery by the data that we need which is resolutions */
 const App = ({ loading, resolutions, client, user }) => {
   if (loading) return null;
   return (
 	<div>
-	  { user._id ?
-		(<button onClick={() => {Meteor.logout(); client.resetStore(); }}> Logout </button>)
-		:
-		(<div>
-		  <RegisterForm client={client} />
-		  <LoginForm client={client} />
-		</div>
-	  )}
-      <ResolutionForm />
+	  <UserForm user={user} client={client} />
+	{user._id && <ResolutionForm /> }
+	{user._id &&
       <ul>
-        {resolutions.map(resolution => (<li key={resolution._id}>{resolution.name}</li> ))}
-    </ul>
-      </div>
+      {resolutions.map(resolution => (
+		<li key={resolution._id}>
+		  <span style={{ textDecoration: resolution.completed ? 'line-through' : 'none' }}>{resolution.name}</span>
+		  <ul>
+			{resolution.goals.map(goal => (<Goal goal={goal} key={goal._id} />))}
+		  </ul>
+		  <GoalForm resolutionId={resolution._id}/>
+		  </li>
+	  ))}
+      </ul>
+	}
+    </div>
+
   );
 };
 
@@ -39,6 +44,12 @@ const resolutionsQuery = gql`
   resolutions {
     _id
     name
+    completed
+    goals {
+      _id
+      name
+      completed
+    }
   }
   user {
     _id

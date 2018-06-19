@@ -21,7 +21,7 @@ const typeDefs = [
   UsersSchema,
   GoalsSchema
 ];
-
+// //
 /* the merge() from lodash merges the two resolvers together instead of having
 // add the resolver from resolvers.js which would also have a nested Query{}
 // Thanks Scott, your naming conventions for your tutorials is disgusting

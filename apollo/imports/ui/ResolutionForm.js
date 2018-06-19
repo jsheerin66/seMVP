@@ -11,6 +11,10 @@ const createResolution = gql`
 `;
 console.log('createResolution is = ',createResolution);
 class ResolutionForm extends Component {
+  state = {
+	error: null
+  }
+
   submitForm = () => {
     this.props
       .createResolution({
@@ -24,12 +28,14 @@ class ResolutionForm extends Component {
 	  })*/
       .catch(error => {
         console.log(error);
+		this.setState({error: error.message})
       });
   };
 
   render() {
     return (
       <div>
+		{this.state.error && <p style={{color:'red'}}>{this.state.error}</p>}
         <input type="text" ref={input => (this.name = input)} />
         <button onClick={this.submitForm}>Submit</button>
       </div>
@@ -38,7 +44,9 @@ class ResolutionForm extends Component {
 }
 
 /* options is going to be an obj and we are passing in an array of
-// this says automatically refetch the data *note look at the .then in ResolutionForm* */
+// this says automatically refetch the data *note look at the .then in ResolutionForm*
+   and when
+*/
 export default graphql(createResolution, {
   name: "createResolution",
   options: {
