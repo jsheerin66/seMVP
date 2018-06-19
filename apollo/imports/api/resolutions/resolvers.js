@@ -10,13 +10,14 @@ import Resolutions from './resolutions';
 // const res = Resolutions.find({}).fetch();
 // console.log('This is the res in resolvers.js:', res); */
 /* we replace the query to our server with a query to our database */
-  /* Both Query & Mutation objects take 3 args which are these (obj, name, context){}  but need to look up context */
+  /* Both Query & Mutation objects take 3 args which are these:
+	 (obj, name, context){}  but need to look up context */
     /* ***NOTE*** if the resolution is not tied to a user through Mutation
        then userId won't show in the browser */
 export default {
   Query: {
     resolutions (obj, args, { userId }) {
-      // console.log('This is userId: ', userId);
+	  console.log('args: ',args);
       return Resolutions.find({
         userId
       }).fetch();
@@ -32,7 +33,10 @@ export default {
       */
   Mutation: {
     createResolution (obj, { name }, { userId }) {
-      /* console.log('This is Resolutions from DB: ', Resolutions);
+	  /* resolutionId is sending the text field content on the client
+		 side through a Mutation, and hitting the server   */
+	  // console.log('userId: ',userId);
+	  /* console.log('This is Resolutions from DB: ', Resolutions);
       console.log('This is name:', name);
       console.log('THis is obj: ', obj);
       console.log('This is context: ', userId);
@@ -41,6 +45,9 @@ export default {
         name,
         userId
       });
+	  /* its only because graphql is expecting a return that
+		 we have the following line. We are not yet doing
+		 anything with this return  */
       return Resolutions.findOne(resolutionId);
     }
   }

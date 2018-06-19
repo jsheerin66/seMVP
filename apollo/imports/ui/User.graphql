@@ -2,7 +2,7 @@ type User {
   _id: String
   email: String
 }
+
 extend type Query {
   user: User
 }
-# this is the user schema

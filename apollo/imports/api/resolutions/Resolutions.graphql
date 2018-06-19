@@ -1,5 +1,3 @@
-# This is the schema
-
 # name
 # createdAt
 # [todoId]
@@ -16,8 +14,14 @@ type Query {
   resolutions: [Resolution]
 }
 
-
 # this is a 'new' type so now we have 2 types defined in our schema
+
 type Mutation {
   createResolution(name: String!): Resolution
 }
+
+# if graphql cant see user defined in schema remove everything from here and put it in scratch, then restart server, then put it back
+
+
+
+# use css-mode for highlighting

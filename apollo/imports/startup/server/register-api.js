@@ -2,11 +2,14 @@ import { createApolloServer } from 'meteor/apollo';
 import { makeExecutableSchema } from 'graphql-tools';
 import merge from 'lodash/merge';
 
+
 import ResolutionsSchema from '../../api/resolutions/Resolutions.graphql';
 import ResolutionsResolvers from '../../api/resolutions/resolvers';
 import UsersSchema from '../../api/users/User.graphql';
 import UsersResolvers from '../../api/users/resolvers';
-
+import GoalsSchema from '../../api/goals/Goal.graphql';
+import GoalsResolvers from '../../api/goals/resolvers';
+// !*!*!*!* Note- to user the graphql tools go to localhost:3000/graphigl //
 /*
 1) make the first Query inside our schema using back-ticks
 2) note* this is not javascript, its graphgl query language
@@ -15,7 +18,8 @@ import UsersResolvers from '../../api/users/resolvers';
 */
 const typeDefs = [
   ResolutionsSchema,
-  UsersSchema
+  UsersSchema,
+  GoalsSchema
 ];
 
 /* the merge() from lodash merges the two resolvers together instead of having
@@ -23,9 +27,12 @@ const typeDefs = [
 // Thanks Scott, your naming conventions for your tutorials is disgusting
 // *NOTE* merge is not common practice but is the best way
 // Scott likes to have folders serperating reolvers, mutations, and schemas */
+/* *!!**!! Note, Scott really does suck at teaching. He should stay away from teaching new technologies*/
+/* fucking scott Make sure the order is correct here with Goals on the bottom. Otherwise it won't find the user:User because it extends the other schema */
 const resolvers = merge(
   ResolutionsResolvers,
-  UsersResolvers
+  UsersResolvers,
+  GoalsResolvers
 );
 // console.log('This is resolvers: ', resolvers);
 /*
@@ -37,8 +44,7 @@ const schema = makeExecutableSchema({
   typeDefs,
   resolvers
 })
-
-// we pass our schema(resolver/typeDefs to our apollo server)
+/* we pass our schema(resolver/typeDefs to our apollo server) */
 createApolloServer({ schema });
 
 /*

@@ -1,2 +1,2 @@
 import '../imports/startup/server';
-console.log("Hi from server/init.js");
+// console.log("Hi from server/init.js");
